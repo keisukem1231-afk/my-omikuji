@@ -1,16 +1,58 @@
-# React + Vite
+# 今日のおみくじ
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+ボタンを押すと「大吉〜凶」のうちどれかがランダムに表示される、Reactの学習用おみくじアプリ。
 
-Currently, two official plugins are available:
+## 要件分解表
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+| 項目 | 内容 |
+|---|---|
+| 何を作るか | ランダムに運勢を表示するおみくじアプリ |
+| 画面に出すもの | タイトル・結果表示エリア・「おみくじを引く」ボタン |
+| できる操作 | ボタンをクリックして結果を引く |
+| 持つ状態(state) | result(現在の結果、初期値null) |
+| 使う技術 | React / useState / Tailwind |
+| つまずきそうな所 | 結果によって文字色を変える部分 |
 
-## React Compiler
+## PR本文
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 概要と工夫した点
 
-## Expanding the Oxlint configuration
+ボタンを押すたびに`Math.random()`で運勢をランダム選出するシンプルなアプリ。結果ごとにTailwindの文字色を変え、一目見て運勢の強さが分かるようにした。
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+### AIに送ったプロンプト
+
+1. 「Reactでおみくじアプリを作っています。ボタンを押すとランダムに大吉〜凶が表示され、Tailwindで運勢ごとに文字色を変えたいです。useStateで管理してApp.jsxを書いてください」
+2. 「結果が出る前は『ボタンを押してね』と表示したいです。どう直せばいいですか」
+3. 「resultsの配列からランダムに1つ選ぶ処理を、初学者にも分かるように説明してください」
+
+### AIの提案を採用しなかった箇所
+
+AIは最初、結果を`useEffect`で自動的に一定間隔で変える演出を提案してきたが、今回はシンプルにボタンを押した瞬間だけ変われば十分だと判断し、不採用にした。
+
+### 自分で理解していることの確認
+
+`results[Math.floor(Math.random() * results.length)]`は、「0以上1未満の乱数」に配列の長さを掛けて「0〜配列の要素数未満」の小数にし、`Math.floor`で切り捨てて整数のインデックスに変換し、それを添字として配列から1件取り出している、と理解した。
+
+### PH1全体の振り返り
+
+(ここに自分の言葉で記入)
+
+## 確認結果
+
+- スマホ幅(375px): 崩れなし
+- PC幅(1280px): 崩れなし
+
+## 判断の記録
+
+- 選択肢A: 結果ごとに文字色を変える
+- 選択肢B: 色は変えず文字サイズだけ大きくする
+- 採用した理由: 一目で運勢の良し悪しが伝わるため
+- 確認方法: 6種類すべての結果を出るまで引いて、色分けを目視確認
+
+## AI利用
+
+- 使ったAIツール: Claude
+- 主にどこをAIに任せたか: 全体のコード実装
+- 採用したAI提案と理由: useStateでの結果管理、Tailwindでの色分け(要件に合っていたため)
+- 採用しなかったAI提案と理由: useEffectによる自動演出(シンプルさを優先し不採用)
+- 自分で書いた・直した箇所: (実際に自分で手を加えた箇所があれば記入)
